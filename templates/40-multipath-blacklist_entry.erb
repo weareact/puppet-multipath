@@ -1,0 +1,14 @@
+blacklist<%= exception_suffix %> {
+<% wwid.each do |device_id| -%>
+    wwid        <%= device_id %>
+<% end -%>
+<% devnode.each do |excluded_dev| -%>
+    devnode     "<%= excluded_dev %>"
+<% end -%>
+<% if vendor != '' -%>
+    device {
+        vendor  "<%= vendor %>"
+        product "<%= product %>"           
+    }
+<% end -%>
+}

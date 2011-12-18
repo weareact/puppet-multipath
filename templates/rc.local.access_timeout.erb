@@ -1,0 +1,4 @@
+###     Multipath part   ########
+# Increase default timeout for FC
+for i in /sys/block/sd*; do echo <%= scope.lookupvar('multipath::access_timeout') %>  > $i/device/timeout; done
+
