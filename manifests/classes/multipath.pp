@@ -114,7 +114,7 @@ inherits multipath::params
 
     case $::operatingsystem {
         debian, ubuntu:         { include multipath::debian }
-        #redhat, fedora, centos: { include multipath::redhat }
+        redhat, fedora, centos: { include multipath::redhat }
         default: {
             fail("Module $module_name is not supported on $operatingsystem")
         }

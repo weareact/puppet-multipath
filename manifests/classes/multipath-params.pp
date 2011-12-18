@@ -116,7 +116,6 @@ class multipath::params {
         default => 'device-mapper-multipath'
     }
 
-
     $servicename = $::operatingsystem ? {
         /(?i-mx:ubuntu|debian)/ => 'multipath-tools',
         default                 => 'multipathd'

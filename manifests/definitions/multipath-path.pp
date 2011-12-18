@@ -73,6 +73,7 @@ define multipath::path (
     $content           = '',
     $source            = '',
     $path_grouping_policy = $multipath::params::path_grouping_policy,
+    $prio_callout      = $multipath::params::prio_callout,
     $path_selector     = $multipath::params::selector,
     $failback          = $multipath::params::failback,
     $no_path_retry     = $multipath::params::no_path_retry,

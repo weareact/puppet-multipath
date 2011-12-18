@@ -6,6 +6,10 @@
 <% if path_grouping_policy != scope.lookupvar('multipath::path_grouping_policy') -%>
         path_grouping_policy <%= path_grouping_policy %>
 <% end -%>
+<% if prio_callout != scope.lookupvar('multipath::prio_callout') -%>
+        prio_callout    "<%= prio_callout %>"
+<% end -%>
+
 <% if path_selector != scope.lookupvar('multipath::selector') -%>
         path_selector   "<%= path_selector %>"
 <% end -%>
