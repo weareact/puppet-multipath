@@ -6,9 +6,10 @@ lvchange -an /dev/vg_nfs_nexsan/lvm_nfs_nexsan
 multipath -F
 multipath
 multipath -ll
+/etc/init.d/multipath-tools start
 lvscan -a
 lvchange -ay /dev/vg_nfs_nexsan/lvm_nfs_nexsan
 lvscan -a
 mount /data
-/etc/init.d/nfs-kernel-server restart
+[ -f "/etc/init.d/nfs-kernel-server"] && /etc/init.d/nfs-kernel-server restart
 ###############################################
