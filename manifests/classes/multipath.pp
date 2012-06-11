@@ -251,11 +251,11 @@ class multipath::debian inherits multipath::common {
         ensure => "${multipath::ensure}"
     }
 
-    update::rc_local { 'FIX bad discovery of multipath':
-        ensure => "${multipath::ensure}",
-        source => "puppet:///modules/multipath/rc.local.debian.fix_bad_multipath_discovery",
-        order  => 60
-    }
+    # update::rc_local { 'FIX bad discovery of multipath':
+    #     ensure => "${multipath::ensure}",
+    #     source => "puppet:///modules/multipath/rc.local.debian.fix_bad_multipath_discovery",
+    #     order  => 60
+    # }
 
 }
 
