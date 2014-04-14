@@ -61,6 +61,10 @@ class multipath::params {
     # identifier. Absolute path required.  
     $getuid_callout = $::operatingsystem ? {
         /(?i-mx:ubuntu|debian)/ => '/lib/udev/scsi_id --whitelisted --device=/dev/%n',
+        /(?i-mx:redhat|centos)/ => $::lsbmajdistrelease ? {
+            6       => '/lib/udev/scsi_id --whitelisted --device=/dev/%n',
+            default => '/sbin/scsi_id -g -u -s /block/%n'
+        },
         default                 => '/sbin/scsi_id -g -u -s /block/%n'        
     }
 
