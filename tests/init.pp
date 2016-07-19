@@ -16,5 +16,64 @@
 #      sudo puppet apply -t /vagrant/tests/init.pp
 #
 node default {
-    include multipath
+
+    # Multipath part
+    class { 'multipath':
+        ensure               => 'present',
+        access_timeout       => '150',
+        polling_interval     => '10',
+        selector             => 'round-robin 0',
+        path_grouping_policy => 'group_by_prio',
+        #getuid_callout       => '/lib/udev/scsi_id --whitelisted --device=/dev/%n',
+        #getuid_callout       => '/sbin/scsi_id -g -u -s /block/%n',
+        #prio_callout         => '/sbin/mpath_prio_alua /dev/%n',
+        prio                 => 'alua /dev/%n',
+        path_checker         => 'emc_clariion',
+        failback             => 'immediate',
+        rr_min_io            => '100',
+        rr_weight            => 'uniform',
+        no_path_retry        => '12',
+        user_friendly_names  => 'yes'
+    }
+
+    multipath::device { 'SAN':
+        ensure               => 'present',
+        vendor               => 'DGC.*',  # As reported by
+        product              => 'RAID.*', # /proc/scsi/scsi
+        hardware_handler     => '0',
+        path_grouping_policy => 'group_by_prio',
+        features             => '1 queue_if_no_path',
+        path_checker         => 'emc_clariion',
+        path_selector        => 'round-robin 0',
+        rr_weight            => 'priorities',
+        no_path_retry        => '5',
+        rr_min_io            => '16',
+        failback             => '300'
+    }
+
+    multipath::blacklist { 'Storage server internals':
+        ensure  => 'present',
+        devnode => [
+                    '^(ram|raw|loop|fd|md|dm-|sr|scd|st)[0-9]*',
+                    '^hd[a-z][[0-9]*]',
+                    '^cciss\!c[0-9]d[0-9]*',
+                    #           '^(sda|sdb|sde|sdh)'
+                    '^sda'
+                    ],
+    }
+
+    multipath::path {
+        [
+        '3600601606a47130037abf2635bb1e111',
+        '3600601606a4713005d362f7b5bb1e111'
+        ]:
+            ensure               => 'present',
+            path_grouping_policy => 'group_by_prio',
+            path_selector        => 'round-robin 0',
+            failback             => '300',
+            rr_weight            => 'priorities',
+            no_path_retry        => '5',
+            rr_min_io            => '16',
+    }
+
 }
