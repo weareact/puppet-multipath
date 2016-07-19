@@ -1,0 +1,15 @@
+##################################
+# FIX bad discovery of multipath #
+##############################################
+/etc/init.d/multipath-tools stop
+lvchange -an /dev/vg_nfs_nexsan/lvm_nfs_nexsan
+multipath -F
+multipath
+multipath -ll
+/etc/init.d/multipath-tools start
+lvscan -a
+lvchange -ay /dev/vg_nfs_nexsan/lvm_nfs_nexsan
+lvscan -a
+mount /data
+[ -f "/etc/init.d/nfs-kernel-server"] && /etc/init.d/nfs-kernel-server restart
+###############################################

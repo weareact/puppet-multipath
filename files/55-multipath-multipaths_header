@@ -1,0 +1,20 @@
+
+### List of multipaths finest-grained settings ###
+multipaths {
+#
+#   Example (use multipath::path to add a new entry)
+#   multipath {
+#       wwid            3600508b4000156d700012000000b0000
+#       alias           yellow
+#       path_grouping_policy    multibus
+#       path_selector   "round-robin 0"
+#       failback        manual
+#       rr_weight       priorities
+#       no_path_retry   5
+#       rr_min_io       100
+#   }
+#   multipath {
+#       wwid            1DEC_____321816758474
+#       alias           red
+#   }
+#

@@ -1,0 +1,10 @@
+
+### revert the actions of the blacklist section, ie to include specific device
+### in the multipath topology. 
+#
+# Example (use multipath::blacklist with is_exceptions == true to configure this section): 
+# blacklist_exceptions {
+#     devnode "^dasd[c-d]+[0-9]*"
+#     wwid    "IBM.75000000092461.4d00.34"
+# }
+#

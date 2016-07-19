@@ -1,0 +1,19 @@
+
+### list of per storage controller settings ###
+devices {
+#   Example (use multipath::device to add a new device entry)
+#   device {
+#       vendor      "COMPAQ  "
+#       product     "HSV110 (C)COMPAQ"
+#       path_grouping_policy    multibus
+#       getuid_callout      "/lib/udev/scsi_id --whitelisted --device=/dev/%n"
+#       path_checker        directio
+#       path_selector       "round-robin 0"
+#       hardware_handler    "0"
+#       failback            15
+#       rr_weight           priorities
+#       no_path_retry       queue
+#       rr_min_io           100
+#       product_blacklist   LUNZ
+#   }
+#
