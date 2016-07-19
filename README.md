@@ -4,7 +4,7 @@
 
 [![Puppet Forge](http://img.shields.io/puppetforge/v/ULHPC/multipath.svg)](https://forge.puppetlabs.com/ULHPC/multipath)
 [![License](http://img.shields.io/:license-GPL3.0-blue.svg)](LICENSE)
-![Supported Platforms](http://img.shields.io/badge/platform-debian-lightgrey.svg)
+![Supported Platforms](http://img.shields.io/badge/platform-debian|centos-lightgrey.svg)
 [![Documentation Status](https://readthedocs.org/projects/ulhpc-puppet-multipath/badge/?version=latest)](https://readthedocs.org/projects/ulhpc-puppet-multipath/?badge=latest)
 
 Configure multipath to detect multiple paths to devices for fail-over or performance reasons and coalesces them
@@ -21,8 +21,16 @@ Configure multipath to detect multiple paths to devices for fail-over or perform
 This module implements the following elements: 
 
 * __Puppet classes__:
+    - `multipath` 
+    - `multipath::common` 
+    - `multipath::common::debian` 
+    - `multipath::common::redhat` 
+    - `multipath::params` 
 
 * __Puppet definitions__: 
+    - `multipath::blacklist` 
+    - `multipath::device` 
+    - `multipath::path` 
 
 All these components are configured through a set of variables you will find in
 [`manifests/params.pp`](manifests/params.pp). 
@@ -35,6 +43,7 @@ See `docs/contributing.md` for more details on the steps you shall follow to hav
 See [`metadata.json`](metadata.json). In particular, this module depends on 
 
 * [puppetlabs/stdlib](https://forge.puppetlabs.com/puppetlabs/stdlib)
+* [puppetlabs/concat](https://forge.puppetlabs.com/puppetlabs/concat)
 
 ## Overview and Usage
 
@@ -51,6 +60,57 @@ Use it as follows:
 
 See also [`tests/init.pp`](tests/init.pp)
 
+
+### Definition `multipath::blacklist`
+
+The definition `multipath::blacklist` provides ...
+This definition accepts the following parameters:
+
+* `$ensure`: default to 'present', can be 'absent'
+* `$content`: specify the contents of the directive as a string
+* `$source`: copy a file as the content of the directive.
+
+Example:
+
+        multipath::blacklist { 'toto':
+		      ensure => 'present',
+        }
+
+See also [`tests/blacklist.pp`](tests/blacklist.pp)
+
+### Definition `multipath::device`
+
+The definition `multipath::device` provides ...
+This definition accepts the following parameters:
+
+* `$ensure`: default to 'present', can be 'absent'
+* `$content`: specify the contents of the directive as a string
+* `$source`: copy a file as the content of the directive.
+
+Example:
+
+        multipath::device { 'toto':
+		      ensure => 'present',
+        }
+
+See also [`tests/device.pp`](tests/device.pp)
+
+### Definition `multipath::path`
+
+The definition `multipath::path` provides ...
+This definition accepts the following parameters:
+
+* `$ensure`: default to 'present', can be 'absent'
+* `$content`: specify the contents of the directive as a string
+* `$source`: copy a file as the content of the directive.
+
+Example:
+
+        multipath::path { 'toto':
+		      ensure => 'present',
+        }
+
+See also [`tests/path.pp`](tests/path.pp)
 
 
 ## Librarian-Puppet / R10K Setup
