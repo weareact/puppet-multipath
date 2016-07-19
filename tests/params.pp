@@ -15,7 +15,7 @@
 
 include 'multipath::params'
 
-$names = ["ensure", "access_timeout", "polling_interval", "selector", "path_grouping_policy", "getuid_callout", "prio_callout", "prio", "path_checker", "failback", "no_path_retry", "rr_min_io", "rr_weight", "user_friendly_names", "max_fds", "packagename", "servicename", "processname", "hasstatus", "hasrestart", "configfile", "configfile_mode", "configfile_owner", "configfile_group"]
+$names = ['ensure', 'access_timeout', 'polling_interval', 'selector', 'path_grouping_policy', 'getuid_callout', 'prio_callout', 'prio', 'path_checker', 'failback', 'no_path_retry', 'rr_min_io', 'rr_weight', 'user_friendly_names', 'max_fds', 'packagename', 'servicename', 'processname', 'hasstatus', 'hasrestart', 'configfile', 'configfile_mode', 'configfile_owner', 'configfile_group']
 
 notice("multipath::params::ensure = ${multipath::params::ensure}")
 notice("multipath::params::access_timeout = ${multipath::params::access_timeout}")
