@@ -1,0 +1,29 @@
+    multipath {
+        wwid        <%= @wwid %>
+<% if @devalias != '' -%>
+        alias       "<%= @devalias %>"
+<% end -%>
+<% if @path_grouping_policy != scope.lookupvar('multipath::path_grouping_policy') -%>
+        path_grouping_policy <%= @path_grouping_policy %>
+<% end -%>
+<% if @prio_callout != scope.lookupvar('multipath::prio_callout') -%>
+        prio_callout    "<%= @prio_callout %>"
+<% end -%>
+
+<% if @path_selector != scope.lookupvar('multipath::selector') -%>
+        path_selector   "<%= @path_selector %>"
+<% end -%>
+<% if @failback != scope.lookupvar('multipath::failback') -%>
+        failback        <%= @failback %>
+<% end -%>
+<% if @rr_weight != scope.lookupvar('multipath::rr_weight')  -%>
+        rr_weight       <%= @rr_weight %>
+<% end -%>
+<% if @no_path_retry != scope.lookupvar('multipath::no_path_retry') -%>
+        no_path_retry   <%= @no_path_retry %>
+<% end -%>
+<% if @rr_min_io != scope.lookupvar('multipath::rr_min_io') -%>
+        rr_min_io       <%= @rr_min_io %>
+<% end -%>
+    }
+
