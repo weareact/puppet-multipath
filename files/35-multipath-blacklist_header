@@ -1,0 +1,16 @@
+
+### devices should be excluded from the multipath topology discovery ###
+# It is most commonly used to exclude local disks or LUNs for the array
+# controller  
+#
+# Example (use multipath::blacklist to configure this section): 
+# blacklist {
+#     wwid 26353900f02796769
+#     devnode "^(ram|raw|loop|fd|md|dm-|sr|scd|st)[0-9]*"
+#     devnode "^hd[a-z][[0-9]*]"
+#     device {
+#         vendor DEC.*
+#         product MSA[15]00
+#     }
+# }
+#
