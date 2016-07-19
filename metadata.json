@@ -15,6 +15,10 @@
     {
       "name": "puppetlabs-stdlib",
       "version_requirement": ">=4.2.2 <5.0.0"
+    },
+    {
+      "name": "puppetlabs/concat",
+      "version_requirement": ">= 1.2.0 < 2.0.0"
     }
   ],
   "operatingsystem_support": [
@@ -24,7 +28,29 @@
         "6",
         "7"
       ]
+    },
+    {
+      "operatingsystem": "Centos",
+      "operatingsystemrelease": [
+        "5",
+        "6"
+      ]
     }
   ],
-  "tags": ["storage", "multipath"]
+  "tags": [
+    "storage",
+    "multipath"
+  ],
+  "classes": [
+    "multipath",
+    "multipath::common",
+    "multipath::common::debian",
+    "multipath::common::redhat",
+    "multipath::params"
+  ],
+  "definitions": [
+    "multipath::blacklist",
+    "multipath::device",
+    "multipath::path"
+  ]
 }
