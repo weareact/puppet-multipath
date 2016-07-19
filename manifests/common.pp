@@ -25,14 +25,14 @@ class multipath::common {
         name   => $multipath::params::packagename,
     }
 
-    update::rc_local { 'Increase timeout for FC':
+    include rclocal
+    rclocal::update { 'Increase timeout for FC':
         ensure  => $multipath::ensure,
         content => template('multipath/rc.local.access_timeout.erb'),
         order   => 20
     }
 
     # TODO: deal with ensure != 'present'
-    include concat::setup
     concat { $multipath::params::configfile:
         warn    => false,
         owner   => $multipath::params::configfile_owner,

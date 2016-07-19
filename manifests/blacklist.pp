@@ -37,10 +37,10 @@
 #  Default: false
 #
 # [*wwid*]
-#  Can be an array. The World Wide Identification of a device
+# Array of wwid: World Wide Identification of a device
 #
 # [*devnode*]
-#  Can be an array. Product strings to blacklist for this vendor
+#  Array of product strings to blacklist for this vendor
 #
 # [*vendor*]
 #   Vendor identifier.
@@ -76,8 +76,8 @@ define multipath::blacklist (
     $is_exception = false,
     $content      = '',
     $source       = '',
-    $wwid         = '',
-    $devnode      = '',
+    $wwid         = [],
+    $devnode      = [],
     $vendor       = '',
     $product      = ''
 )
@@ -98,7 +98,7 @@ define multipath::blacklist (
 
     if ($multipath::ensure != $ensure) {
         if ($multipath::ensure != 'present') {
-            fail("Cannot configure a multipath blacklist '${vendorname}' as multipath::ensure is NOT set to present (but ${multipath::ensure})")
+            fail("Cannot configure a multipath blacklist '${blacklist_name}' as multipath::ensure is NOT set to present (but ${multipath::ensure})")
         }
     }
 
@@ -116,18 +116,17 @@ define multipath::blacklist (
     $real_content = $content ? {
         '' => $source ? {
             ''      => template('multipath/40-multipath-blacklist_entry.erb'),
-            default => ''
+            default => undef
         },
         default => $content
     }
     $real_source = $source ? {
-        '' => '',
+        '' => undef,
         default => $content ? {
             ''      => $source,
-            default => ''
+            default => undef
         }
     }
-
 
     concat::fragment { "${multipath::params::configfile}_blacklist${exception_suffix}_${name}":
         ensure  => $ensure,

@@ -129,15 +129,15 @@ define multipath::device (
     $real_content = $content ? {
         '' => $source ? {
             ''      => template('multipath/20-multipath-device_entry.erb'),
-            default => ''
+            default => undef
         },
         default => $content
     }
     $real_source = $source ? {
-        '' => '',
+        '' => undef,
         default => $content ? {
             ''      => $source,
-            default => ''
+            default => undef
         }
     }
 

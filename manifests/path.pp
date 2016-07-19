@@ -98,7 +98,7 @@ define multipath::path (
 
     if ($multipath::ensure != $ensure) {
         if ($multipath::ensure != 'present') {
-            fail("Cannot configure a multipath path '${vendorname}' as multipath::ensure is NOT set to present (but ${multipath::ensure})")
+            fail("Cannot configure a multipath path '${wwid}' as multipath::ensure is NOT set to present (but ${multipath::ensure})")
         }
     }
 
@@ -106,15 +106,15 @@ define multipath::path (
     $real_content = $content ? {
         '' => $source ? {
             ''      => template('multipath/60-multipath-path_entry.erb'),
-            default => ''
+            default => undef
         },
         default => $content
     }
     $real_source = $source ? {
-        '' => '',
+        '' => undef,
         default => $content ? {
             ''      => $source,
-            default => ''
+            default => undef
         }
     }
 
