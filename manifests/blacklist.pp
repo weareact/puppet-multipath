@@ -89,7 +89,7 @@ define multipath::blacklist (
     $blacklist_name = $name
 
     if ($multipath::configfile_source != '' or $multipath::configfile_content != '') {
-        fail("multipath::blacklist cannot be used when the configfile_source attribute has been set")
+        fail('multipath::blacklist cannot be used when the configfile_source attribute has been set')
     }
 
     if ! ($ensure in [ 'present', 'absent' ]) {
@@ -130,9 +130,9 @@ define multipath::blacklist (
 
 
     concat::fragment { "${multipath::params::configfile}_blacklist${exception_suffix}_${name}":
-        target  => "${multipath::params::configfile}",
-        ensure  => "${ensure}",
-        order   => "${order}",
+        ensure  => $ensure,
+        target  => $multipath::params::configfile,
+        order   => $order,
         content => $real_content,
         source  => $real_source,
         #notify  => Service['multipath'],

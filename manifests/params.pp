@@ -1,7 +1,7 @@
-# File::      <tt>multipath-params.pp</tt>
-# Author::    Sebastien Varrette (Sebastien.Varrette@uni.lu)
-# Copyright:: Copyright (c) 2011 Sebastien Varrette
-# License::   GPL v3
+# File::      <tt>params.pp</tt>
+# Author::    S. Varrette, H. Cartiaux, V. Plugaru, S. Diehl aka. UL HPC Management Team (hpc-sysadmins@uni.lu)
+# Copyright:: Copyright (c) 2016 S. Varrette, H. Cartiaux, V. Plugaru, S. Diehl aka. UL HPC Management Team
+# License::   Gpl-3.0
 #
 # ------------------------------------------------------------------------------
 # = Class: multipath::params
@@ -30,12 +30,12 @@ class multipath::params {
     ###########################################
 
     # ensure the presence (or absence) of multipath
-    $ensure = $multipath_ensure ? {
+    $ensure = $::multipath_ensure ? {
         ''      => 'present',
-        default => "${multipath_ensure}"
+        default => $::multipath_ensure
     }
 
-    # timeout to access a volume by Fiber Channel 
+    # timeout to access a volume by Fiber Channel
     $access_timeout = '45'
 
     ### Those are the values put in the multipath.conf file
@@ -47,35 +47,35 @@ class multipath::params {
     # the kernel multipath target.
     # Currently support a single value: "round-robin 0"
     $selector = 'round-robin 0'
-    
+
     # Default path grouping policy to apply to unspecified multipaths.
     # Possible values:
     # - failover           = 1 path per priority group
-	# - multibus           = all valid paths in 1 priority group
-	# - group_by_serial    = 1 priority group per detected serial number
-	# - group_by_prio      = 1 priority group per path priority value
-	# - group_by_node_name = 1 priority group per target node name
+        # - multibus           = all valid paths in 1 priority group
+        # - group_by_serial    = 1 priority group per detected serial number
+        # - group_by_prio      = 1 priority group per path priority value
+        # - group_by_node_name = 1 priority group per target node name
     $path_grouping_policy = 'multibus'
 
     # Default program and args to callout to obtain a unique path
-    # identifier. Absolute path required.  
+    # identifier. Absolute path required.
     $getuid_callout = $::operatingsystem ? {
         /(?i-mx:ubuntu|debian)/ => '/lib/udev/scsi_id --whitelisted --device=/dev/%n',
         /(?i-mx:redhat|centos)/ => $::lsbmajdistrelease ? {
             6       => '/lib/udev/scsi_id --whitelisted --device=/dev/%n',
             default => '/sbin/scsi_id -g -u -s /block/%n'
         },
-        default                 => '/sbin/scsi_id -g -u -s /block/%n'        
+        default                 => '/sbin/scsi_id -g -u -s /block/%n'
     }
 
     # Default function to call to obtain a path priority value
     # The ALUA bits in SPC-3 provide an exploitable prio value for example.
     # Use $prio_callout in RedHat-like systems, and $prio on Debian-like
-    # systems. 
+    # systems.
     $prio_callout  = 'none'
     $prio          = 'alua /dev/%n'
 
-    # Default method used to determine the paths' state. 
+    # Default method used to determine the paths' state.
     # Possibles values: readsector0|tur|emc_clariion|hp_sw|directio|rdac|cciss_tur
     $path_checker = 'readsector0'
 
@@ -94,24 +94,24 @@ class multipath::params {
     # Number of IO to route to a path before switching to the next in the same
     # path group
     $rr_min_io = '1000'
-    
+
     # if set to priorities, the multipath configurator will assign path weights
     # as  "path prio * rr_min_io"
     # Possible values  : priorities|uniform
     $rr_weight = 'uniform'
 
-    # Whether or not to use user-friendly names. 
+    # Whether or not to use user-friendly names.
     # If set to "yes", using the bindings file /var/lib/multipath/bindings to
     # assign a persistent and unique alias to the multipath, in the form of
-    # mpath<n>. If set to "no" use the WWID as the alias. 
+    # mpath<n>. If set to "no" use the WWID as the alias.
     # Possible values: yes|no
     $user_friendly_names  = 'no'
 
     # Sets the maximum number of open file descriptors for the multipathd
     # process. Possible values: max|n > 0. Unset by default.
     $max_fds = ''
-    
-    
+
+
     #### MODULE INTERNAL VARIABLES  #########
     # (Modify to adapt to unsupported OSes)
     #######################################
