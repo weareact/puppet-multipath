@@ -18,18 +18,18 @@
 class multipath::common {
 
     # Load the variables used in this module. Check the multipath-params.pp file
-    require multipath::params
+    require ::multipath::params
 
     package { 'multipath':
         ensure => $multipath::ensure,
         name   => $multipath::params::packagename,
     }
 
-    include rclocal
+    include ::rclocal
     rclocal::update { 'Increase timeout for FC':
         ensure  => $multipath::ensure,
         content => template('multipath/rc.local.access_timeout.erb'),
-        order   => 20
+        order   => 20,
     }
 
     # TODO: deal with ensure != 'present'
@@ -47,7 +47,7 @@ class multipath::common {
         concat::fragment { "${multipath::params::configfile}_full":
             ensure  => $multipath::ensure,
             target  => $multipath::params::configfile,
-            order   => 01,
+            order   => '01',
             content => $multipath::configfile_content,
             source  => $multipath::configfile_source,
             #notify  => Service['multipath'],

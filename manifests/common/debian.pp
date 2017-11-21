@@ -11,7 +11,7 @@ class multipath::common::debian inherits multipath::common {
 
     # Extra package to provide useful tools to manipulate SCSI
     package { 'sg3-utils':
-        ensure => $multipath::ensure
+        ensure => $multipath::ensure,
     }
 
     # update::rc_local { 'FIX bad discovery of multipath':

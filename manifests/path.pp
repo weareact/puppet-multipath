@@ -82,7 +82,7 @@ define multipath::path (
 )
 {
 
-    include multipath::params
+    include ::multipath::params
 
     # $name is provided by define invocation and is should be set to the
     # vendor, unless the vendor attribute is set

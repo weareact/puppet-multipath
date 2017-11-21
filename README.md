@@ -9,7 +9,7 @@
 
 Configure multipath to detect multiple paths to devices for fail-over or performance reasons and coalesces them
 
-      Copyright (c) 2016 S. Varrette, H. Cartiaux, V. Plugaru, S. Diehl aka. UL HPC Management Team <hpc-sysadmins@uni.lu>
+      Copyright (c) 2017 UL HPC Team <hpc-sysadmins@uni.lu>
       
 
 | [Project Page](https://github.com/ULHPC/puppet-multipath) | [Sources](https://github.com/ULHPC/puppet-multipath) | [Documentation](https://ulhpc-puppet-multipath.readthedocs.org/en/latest/) | [Issues](https://github.com/ULHPC/puppet-multipath/issues) |
@@ -44,6 +44,7 @@ See [`metadata.json`](metadata.json). In particular, this module depends on
 
 * [puppetlabs/stdlib](https://forge.puppetlabs.com/puppetlabs/stdlib)
 * [puppetlabs/concat](https://forge.puppetlabs.com/puppetlabs/concat)
+* [ULHPC/rclocal](https://forge.puppetlabs.com/ULHPC/rclocal)
 
 ## Overview and Usage
 
