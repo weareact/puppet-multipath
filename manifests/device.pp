@@ -102,7 +102,7 @@ define multipath::device (
     $rr_min_io         = $multipath::params::rr_min_io
 )
 {
-    include multipath::params
+    include ::multipath::params
 
     # $name is provided by define invocation and is should be set to the
     # vendor, unless the vendor attribute is set
