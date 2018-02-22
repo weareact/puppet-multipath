@@ -88,7 +88,7 @@ define multipath::path (
     # vendor, unless the vendor attribute is set
     $wwid = $name
 
-    if ($multipath::configfile_source != '' or $multipath::configfile_content != '') {
+    if $multipath::configfile_source != '' {
         fail('multipath::path cannot be used when the configfile_source attribute has been set')
     }
 

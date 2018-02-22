@@ -33,7 +33,7 @@ class multipath::common {
     }
 
     # TODO: deal with ensure != 'present'
-    concat { $multipath::params::configfile:
+    concat { $multipath::configfile:
         warn    => false,
         owner   => $multipath::params::configfile_owner,
         group   => $multipath::params::configfile_group,
@@ -42,13 +42,12 @@ class multipath::common {
         #notify  => Service['multipath'],
     }
 
-    if ($multipath::configfile_source != '' or $multipath::configfile_content != '') {
+    if $multipath::configfile_source != '' {
         # Use the source or the content as the reference for the /etc/multipath.conf
-        concat::fragment { "${multipath::params::configfile}_full":
+        concat::fragment { "${multipath::configfile}_full":
             ensure  => $multipath::ensure,
-            target  => $multipath::params::configfile,
+            target  => $multipath::configfile,
             order   => '01',
-            content => $multipath::configfile_content,
             source  => $multipath::configfile_source,
             #notify  => Service['multipath'],
         }
@@ -61,53 +60,53 @@ class multipath::common {
         #    - multipath::device    (to define a device)
         #    - multipath::blacklist (to blacklist some device from multipathing)
         #    - multipath::path      (to define a path to a device)
-        concat::fragment { "${multipath::params::configfile}_header":
+        concat::fragment { "${multipath::configfile}_header":
             ensure  => $multipath::ensure,
-            target  => $multipath::params::configfile,
+            target  => $multipath::configfile,
             content => template('multipath/01-multipath.conf_header.erb'),
             order   => '01',
         }
 
         # 'devices' section
-        concat::fragment { "${multipath::params::configfile}_devices_header":
+        concat::fragment { "${multipath::configfile}_devices_header":
             ensure => $multipath::ensure,
-            target => $multipath::params::configfile,
+            target => $multipath::configfile,
             source => 'puppet:///modules/multipath/10-multipath-devices_header',
             order  => '10',
         }
-        concat::fragment { "${multipath::params::configfile}_devices_footer":
+        concat::fragment { "${multipath::configfile}_devices_footer":
             ensure => $multipath::ensure,
-            target => $multipath::params::configfile,
+            target => $multipath::configfile,
             source => 'puppet:///modules/multipath/30-multipath-devices_footer',
             order  => '30',
         }
 
         # 'blacklist' section
-        concat::fragment { "${multipath::params::configfile}_blacklist_header":
+        concat::fragment { "${multipath::configfile}_blacklist_header":
             ensure => $multipath::ensure,
-            target => $multipath::params::configfile,
+            target => $multipath::configfile,
             source => 'puppet:///modules/multipath/35-multipath-blacklist_header',
             order  => '35',
         }
 
         # 'blacklist_exceptions' section
-        concat::fragment { "${multipath::params::configfile}_blacklist_exceptions_header":
+        concat::fragment { "${multipath::configfile}_blacklist_exceptions_header":
             ensure => $multipath::ensure,
-            target => $multipath::params::configfile,
+            target => $multipath::configfile,
             source => 'puppet:///modules/multipath/45-multipath-blacklist_exceptions_header',
             order  => '45',
         }
 
         # 'multipaths' section
-        concat::fragment { "${multipath::params::configfile}_multipaths_header":
+        concat::fragment { "${multipath::configfile}_multipaths_header":
             ensure => $multipath::ensure,
-            target => $multipath::params::configfile,
+            target => $multipath::configfile,
             source => 'puppet:///modules/multipath/55-multipath-multipaths_header',
             order  => '55',
         }
-        concat::fragment { "${multipath::params::configfile}_multipaths_footer":
+        concat::fragment { "${multipath::configfile}_multipaths_footer":
             ensure => $multipath::ensure,
-            target => $multipath::params::configfile,
+            target => $multipath::configfile,
             source => 'puppet:///modules/multipath/99-multipath-multipaths_footer',
             order  => '99',
         }
