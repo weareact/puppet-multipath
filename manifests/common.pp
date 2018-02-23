@@ -29,7 +29,7 @@ class multipath::common {
         ensure  => $multipath::service_ensure,
         enable  => $multipath::service_enable,
         name    => $multipath::service_name,
-        require => $multipath::package_name,
+        require => Package[$multipath::package_name],
     }
 
     include ::rclocal
