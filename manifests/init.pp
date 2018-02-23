@@ -14,7 +14,12 @@
 #
 # == Parameters:
 #
-# $ensure:: *Default*: 'present'. Ensure the presence (or absence) of multipath
+# $package_ensure:: *Default*: 'present'. Ensure the presence (or absence) of multipath package
+# $package_name:: Override package name 
+# $service_ensure:: *Default*: 'running'. Ensure that multipath daemon is running
+# $service_enable:: *Default*: 'true'. Ensure that multipath daemon would be started on boot 
+# $service_name:: Override package name 
+# $service_name:: Override package name 
 # $configfile_source:: *Default*: ''. If set, the source of the multipath.conf file
 # $configfile:: Override default configfile path
 # $FC_access_timeout:: *Default*: 150. Timeout to access a volume by Fiber Channel
@@ -77,7 +82,11 @@
 # [Remember: No empty lines between comments and class definition]
 #
 class multipath(
-    $ensure               = $multipath::params::ensure,
+    $package_ensure       = $multipath::params::package_ensure,
+    $package_name         = $multipath::params::package_name,
+    $service_ensure       = $multipath::params::service_ensure,
+    $service_enable       = $multipath::params::service_enable,
+    $service_name         = $multipath::params::service_name,
     $access_timeout       = $multipath::params::access_timeout,
     $configfile_source    = '',
     $configfile           = $multipath::params::configfile,
@@ -97,9 +106,10 @@ class multipath(
 )
 inherits multipath::params
 {
-    info ("Configuring multipath (with ensure = ${ensure})")
 
-    if ! ($ensure in [ 'present', 'absent' ]) {
+    info ("Configuring multipath package (with ensure = ${package_ensure})")
+
+    if ! ($package_ensure in [ 'present', 'absent' ]) {
         fail("Invalid multipath 'ensure' parameter")
     }
     if ! ($path_grouping_policy in [ 'failover', 'multibus', 'group_by_serial', 'group_by_prio', 'group_by_node_name']) {

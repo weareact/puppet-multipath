@@ -21,8 +21,15 @@ class multipath::common {
     require ::multipath::params
 
     package { 'multipath':
-        ensure => $multipath::ensure,
-        name   => $multipath::params::packagename,
+        ensure => $multipath::package_ensure,
+        name   => $multipath::package_name,
+    }
+
+    service { 'multipath':
+        ensure  => $multipath::service_ensure,
+        enable  => $multipath::service_enable,
+        name    => $multipath::service_name,
+        require => $multipath::package_name,
     }
 
     include ::rclocal
@@ -39,7 +46,7 @@ class multipath::common {
         group   => $multipath::params::configfile_group,
         mode    => $multipath::params::configfile_mode,
         require => Package['multipath'],
-        #notify  => Service['multipath'],
+        notify  => Service['multipath'],
     }
 
     if $multipath::configfile_source != '' {
@@ -49,7 +56,7 @@ class multipath::common {
             target  => $multipath::configfile,
             order   => '01',
             source  => $multipath::configfile_source,
-            #notify  => Service['multipath'],
+            notify  => Service['multipath'],
         }
     }
     else

@@ -134,7 +134,7 @@ define multipath::blacklist (
         order   => $order,
         content => $real_content,
         source  => $real_source,
-        #notify  => Service['multipath'],
+        notify  => Service['multipath'],
     }
 }
 

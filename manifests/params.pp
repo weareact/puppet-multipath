@@ -29,11 +29,14 @@ class multipath::params {
     # (The default used is in the line with '')
     ###########################################
 
-    # ensure the presence (or absence) of multipath
-    $ensure = $::multipath_ensure ? {
-        ''      => 'present',
-        default => $::multipath_ensure
-    }
+    # ensure the presence (or absence) of multipath package
+    $package_ensure = 'present'
+
+    # ensure if multipath service is running or stopped
+    $service_ensure = 'running'
+
+    # check if multipath service should be started at boot
+    $service_enable = true
 
     # timeout to access a volume by Fiber Channel
     $access_timeout = '45'
@@ -115,12 +118,12 @@ class multipath::params {
     #### MODULE INTERNAL VARIABLES  #########
     # (Modify to adapt to unsupported OSes)
     #######################################
-    $packagename = $::operatingsystem ? {
+    $package_name = $::operatingsystem ? {
         /(?i-mx:ubuntu|debian)/ => 'multipath-tools',
         default => 'device-mapper-multipath'
     }
 
-    $servicename = $::operatingsystem ? {
+    $service_name = $::operatingsystem ? {
         /(?i-mx:ubuntu|debian)/ => 'multipath-tools',
         default                 => 'multipathd'
     }
