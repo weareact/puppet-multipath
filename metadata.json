@@ -1,6 +1,6 @@
 {
   "name": "ULHPC/multipath",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": "UL HPC Team",
   "mail": "hpc-sysadmins@uni.lu",
   "summary": "Configure multipath to detect multiple paths to devices for fail-over or performance reasons and coalesces them",
