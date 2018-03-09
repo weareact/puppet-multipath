@@ -119,7 +119,6 @@ define multipath::path (
     }
 
     concat::fragment { "${multipath::params::configfile}_multipath_${wwid}":
-        ensure  => $ensure,
         target  => $multipath::params::configfile,
         order   => '60',
         content => $real_content,

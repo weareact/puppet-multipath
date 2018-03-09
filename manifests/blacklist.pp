@@ -129,7 +129,6 @@ define multipath::blacklist (
     }
 
     concat::fragment { "${multipath::params::configfile}_blacklist${exception_suffix}_${name}":
-        ensure  => $ensure,
         target  => $multipath::params::configfile,
         order   => $order,
         content => $real_content,

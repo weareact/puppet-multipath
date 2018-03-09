@@ -142,7 +142,6 @@ define multipath::device (
     }
 
     concat::fragment { "${multipath::params::configfile}_device_${vendorname}":
-        ensure  => $ensure,
         target  => $multipath::params::configfile,
         order   => '20',
         content => $real_content,

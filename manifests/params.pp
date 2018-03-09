@@ -30,7 +30,7 @@ class multipath::params {
     ###########################################
 
     # ensure the presence (or absence) of multipath package
-    $package_ensure = 'present'
+    $ensure = 'present'
 
     # ensure if multipath service is running or stopped
     $service_ensure = 'running'
@@ -64,7 +64,7 @@ class multipath::params {
     # identifier. Absolute path required.
     $getuid_callout = $::operatingsystem ? {
         /(?i-mx:ubuntu|debian)/ => '/lib/udev/scsi_id --whitelisted --device=/dev/%n',
-        /(?i-mx:redhat|centos)/ => $::lsbmajdistrelease ? {
+        /(?i-mx:redhat|centos)/ => $::operatingsystemmajrelease ? {
             6       => '/lib/udev/scsi_id --whitelisted --device=/dev/%n',
             default => '/sbin/scsi_id -g -u -s /block/%n'
         },
