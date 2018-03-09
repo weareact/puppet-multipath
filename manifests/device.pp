@@ -111,8 +111,8 @@ define multipath::device (
         default => $vendor
     }
 
-    if ($multipath::configfile_source != '' or $multipath::configfile_content != '') {
-        fail('multipath::device cannot be used when the configfile_{source,content} attribute has been set')
+    if $multipath::configfile_source != '' {
+        fail('multipath::device cannot be used when the configfile_source attribute has been set')
     }
 
     if ! ($ensure in [ 'present', 'absent' ]) {
@@ -142,12 +142,11 @@ define multipath::device (
     }
 
     concat::fragment { "${multipath::params::configfile}_device_${vendorname}":
-        ensure  => $ensure,
         target  => $multipath::params::configfile,
         order   => '20',
         content => $real_content,
         source  => $real_source,
-        #notify => Service['multipath'],
+        notify  => Service['multipath'],
     }
 }
 

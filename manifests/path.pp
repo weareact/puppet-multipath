@@ -88,7 +88,7 @@ define multipath::path (
     # vendor, unless the vendor attribute is set
     $wwid = $name
 
-    if ($multipath::configfile_source != '' or $multipath::configfile_content != '') {
+    if $multipath::configfile_source != '' {
         fail('multipath::path cannot be used when the configfile_source attribute has been set')
     }
 
@@ -119,12 +119,11 @@ define multipath::path (
     }
 
     concat::fragment { "${multipath::params::configfile}_multipath_${wwid}":
-        ensure  => $ensure,
         target  => $multipath::params::configfile,
         order   => '60',
         content => $real_content,
         source  => $real_source,
-        #notify  => Service['multipath'],
+        notify  => Service['multipath'],
     }
 }
 
