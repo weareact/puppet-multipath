@@ -146,7 +146,7 @@ define multipath::device (
         order   => '20',
         content => $real_content,
         source  => $real_source,
-        notify => Service['multipath'],
+        notify  => Service['multipath'],
     }
 }
 

@@ -30,7 +30,7 @@ class multipath::common {
         $multipath_service_enable = $multipath::service_enable
     } else {
         $multipath_service_ensure = 'stopped'
-        $multipath_service_enable = 'false'
+        $multipath_service_enable = false
     }
 
     service { 'multipath':
@@ -60,10 +60,10 @@ class multipath::common {
     if $multipath::configfile_source != '' {
         # Use the source or the content as the reference for the /etc/multipath.conf
         concat::fragment { "${multipath::configfile}_full":
-            target  => $multipath::configfile,
-            order   => '01',
-            source  => $multipath::configfile_source,
-            notify  => Service['multipath'],
+            target => $multipath::configfile,
+            order  => '01',
+            source => $multipath::configfile_source,
+            notify => Service['multipath'],
         }
     }
     else
