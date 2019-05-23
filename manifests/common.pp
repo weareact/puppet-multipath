@@ -25,7 +25,7 @@ class multipath::common {
         name   => $multipath::package_name,
     }
 
-    if $multipath::params::manage_service {
+    if $multipath::manage_service {
         if $multipath::ensure == 'present' {
             $multipath_service_ensure = $multipath::service_ensure
             $multipath_service_enable = $multipath::service_enable

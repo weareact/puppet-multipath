@@ -81,52 +81,53 @@
 #
 # [Remember: No empty lines between comments and class definition]
 #
-class multipath(
-    $ensure               = $multipath::params::ensure,
-    $package_name         = $multipath::params::package_name,
-    $service_ensure       = $multipath::params::service_ensure,
-    $service_enable       = $multipath::params::service_enable,
-    $service_name         = $multipath::params::service_name,
-    $access_timeout       = $multipath::params::access_timeout,
-    $configfile_source    = undef,
-    $configfile           = $multipath::params::configfile,
-    $polling_interval     = $multipath::params::polling_interval,
-    $selector             = $multipath::params::selector,
-    $path_grouping_policy = $multipath::params::path_grouping_policy,
-    $getuid_callout       = $multipath::params::getuid_callout,
-    $prio_callout         = $multipath::params::prio_callout,
-    $prio                 = $multipath::params::prio,
-    $path_checker         = $multipath::params::path_checker,
-    $failback             = $multipath::params::failback,
-    $no_path_retry        = $multipath::params::no_path_retry,
-    $rr_weight            = $multipath::params::rr_weight,
-    $rr_min_io            = $multipath::params::rr_min_io,
-    $user_friendly_names  = $multipath::params::user_friendly_names,
-    $max_fds              = $multipath::params::max_fds
+class multipath (
+  $ensure               = $multipath::params::ensure,
+  $package_name         = $multipath::params::package_name,
+  $manage_service       = $multipath::params::manage_service,
+  $service_ensure       = $multipath::params::service_ensure,
+  $service_enable       = $multipath::params::service_enable,
+  $service_name         = $multipath::params::service_name,
+  $access_timeout       = $multipath::params::access_timeout,
+  $configfile_source    = undef,
+  $configfile           = $multipath::params::configfile,
+  $polling_interval     = $multipath::params::polling_interval,
+  $selector             = $multipath::params::selector,
+  $path_grouping_policy = $multipath::params::path_grouping_policy,
+  $getuid_callout       = $multipath::params::getuid_callout,
+  $prio_callout         = $multipath::params::prio_callout,
+  $prio                 = $multipath::params::prio,
+  $path_checker         = $multipath::params::path_checker,
+  $failback             = $multipath::params::failback,
+  $no_path_retry        = $multipath::params::no_path_retry,
+  $rr_weight            = $multipath::params::rr_weight,
+  $rr_min_io            = $multipath::params::rr_min_io,
+  $user_friendly_names  = $multipath::params::user_friendly_names,
+  $max_fds              = $multipath::params::max_fds
 )
-inherits multipath::params
-{
+  inherits multipath::params
+  {
 
-    info ("Configuring multipath package (with ensure = ${ensure})")
+    info("Configuring multipath package (with ensure = ${ensure})")
 
-    if ! ($ensure in [ 'present', 'absent' ]) {
-        fail("Invalid multipath 'ensure' parameter")
+    if !($ensure in [ 'present', 'absent' ]) {
+      fail("Invalid multipath 'ensure' parameter")
     }
-    if ! ($path_grouping_policy in [ 'failover', 'multibus', 'group_by_serial', 'group_by_prio', 'group_by_node_name']) {
-        fail("Invalid multipath 'path_grouping_policy' parameter")
+    if !($path_grouping_policy in [ 'failover', 'multibus', 'group_by_serial', 'group_by_prio', 'group_by_node_name']) {
+      fail("Invalid multipath 'path_grouping_policy' parameter")
     }
     if ($selector != 'round-robin 0') {
-        fail("Invalid multipath 'selector' parameter")
+      fail("Invalid multipath 'selector' parameter")
     }
-    if ! ($path_checker in [ 'readsector0', 'tur', 'emc_clariion', 'hp_sw', 'directio', 'rdac', 'cciss_tur']) {
-        fail("Invalid multipath 'path_checker' parameter")
+    if !($path_checker in [ 'readsector0', 'tur', 'emc_clariion', 'hp_sw', 'directio', 'rdac', 'cciss_tur']) {
+      fail("Invalid multipath 'path_checker' parameter")
     }
 
     case $::operatingsystem {
-        'debian', 'ubuntu':         { include ::multipath::common::debian }
-        'redhat', 'fedora', 'centos': { include ::multipath::common::redhat }
-        default: {
-            fail("Module ${module_name} is not supported on ${::operatingsystem}")
-        }
+      'debian', 'ubuntu': { include ::multipath::common::debian }
+      'redhat', 'fedora', 'centos': { include ::multipath::common::redhat }
+      default: {
+        fail("Module ${module_name} is not supported on ${::operatingsystem}")
+      }
     }
-}
+  }
