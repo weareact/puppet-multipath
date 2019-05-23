@@ -146,7 +146,7 @@ class multipath::params {
 
 
     $configfile = $::operatingsystem ? {
-        default => '/etc/multipath.conf.new',
+        default => '/etc/multipath.conf',
     }
 
     $configfile_mode = $::operatingsystem ? {
