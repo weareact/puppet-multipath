@@ -88,7 +88,7 @@ class multipath(
     $service_enable       = $multipath::params::service_enable,
     $service_name         = $multipath::params::service_name,
     $access_timeout       = $multipath::params::access_timeout,
-    $configfile_source    = '',
+    $configfile_source    = undef,
     $configfile           = $multipath::params::configfile,
     $polling_interval     = $multipath::params::polling_interval,
     $selector             = $multipath::params::selector,

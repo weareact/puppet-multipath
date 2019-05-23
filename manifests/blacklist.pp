@@ -88,7 +88,7 @@ define multipath::blacklist (
     # $name is provided by define invocation
     $blacklist_name = $name
 
-    if $multipath::configfile_source != '' {
+    if $multipath::configfile_source != undef and $multipath::configfile_source != '' {
         fail('multipath::blacklist cannot be used when the configfile_source attribute has been set')
     }
 

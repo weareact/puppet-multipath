@@ -25,26 +25,28 @@ class multipath::common {
         name   => $multipath::package_name,
     }
 
-    if $multipath::ensure == 'present' {
-        $multipath_service_ensure = $multipath::service_ensure
-        $multipath_service_enable = $multipath::service_enable
-    } else {
-        $multipath_service_ensure = 'stopped'
-        $multipath_service_enable = false
-    }
+    if $multipath::params::manage_service {
+        if $multipath::ensure == 'present' {
+            $multipath_service_ensure = $multipath::service_ensure
+            $multipath_service_enable = $multipath::service_enable
+        } else {
+            $multipath_service_ensure = 'stopped'
+            $multipath_service_enable = false
+        }
 
-    service { 'multipath':
-        ensure  => $multipath_service_ensure,
-        enable  => $multipath_service_enable,
-        name    => $multipath::service_name,
-        require => Package['multipath'],
-    }
+        service { 'multipath':
+          ensure  => $multipath_service_ensure,
+          enable  => $multipath_service_enable,
+          name    => $multipath::service_name,
+          require => Package['multipath'],
+        }
 
-    include ::rclocal
-    rclocal::update { 'Increase timeout for FC':
-        ensure  => $multipath::ensure,
-        content => template('multipath/rc.local.access_timeout.erb'),
-        order   => 20,
+        include ::rclocal
+        rclocal::update { 'Increase timeout for FC':
+          ensure  => $multipath::ensure,
+          content => template('multipath/rc.local.access_timeout.erb'),
+          order   => 20,
+        }
     }
 
     # TODO: deal with ensure != 'present'
@@ -57,7 +59,7 @@ class multipath::common {
         notify  => Service['multipath'],
     }
 
-    if $multipath::configfile_source != '' {
+    if $multipath::configfile_source != undef and $multipath::configfile_source != '' {
         # Use the source or the content as the reference for the /etc/multipath.conf
         concat::fragment { "${multipath::configfile}_full":
             target => $multipath::configfile,

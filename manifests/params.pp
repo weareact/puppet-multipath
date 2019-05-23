@@ -32,6 +32,9 @@ class multipath::params {
     # ensure the presence (or absence) of multipath package
     $ensure = 'present'
 
+    # manage service
+    $manage_service = true
+
     # ensure if multipath service is running or stopped
     $service_ensure = 'running'
 
