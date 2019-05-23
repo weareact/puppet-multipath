@@ -17,110 +17,111 @@
 # Note: respect the Naming standard provided here[http://projects.puppetlabs.com/projects/puppet/wiki/Module_Standards]
 class multipath::common {
 
-    # Load the variables used in this module. Check the multipath-params.pp file
-    require ::multipath::params
+  # Load the variables used in this module. Check the multipath-params.pp file
+  require ::multipath::params
 
-    package { 'multipath':
-        ensure => $multipath::ensure,
-        name   => $multipath::package_name,
+  package { 'multipath':
+    ensure => $multipath::ensure,
+    name   => $multipath::package_name,
+  }
+
+
+  if $multipath::ensure == 'present' {
+    $multipath_service_ensure = $multipath::service_ensure
+    $multipath_service_enable = $multipath::service_enable
+  } else {
+    $multipath_service_ensure = 'stopped'
+    $multipath_service_enable = false
+  }
+
+  service { 'multipath':
+    ensure  => $multipath_service_ensure,
+    enable  => $multipath_service_enable,
+    name    => $multipath::service_name,
+    require => Package['multipath'],
+  }
+
+  if $multipath::manage_service {
+    include ::rclocal
+    rclocal::update { 'Increase timeout for FC':
+      ensure  => $multipath::ensure,
+      content => template('multipath/rc.local.access_timeout.erb'),
+      order   => 20,
+    }
+  }
+
+  # TODO: deal with ensure != 'present'
+  concat { $multipath::configfile:
+    warn    => false,
+    owner   => $multipath::params::configfile_owner,
+    group   => $multipath::params::configfile_group,
+    mode    => $multipath::params::configfile_mode,
+    require => Package['multipath'],
+    notify  => Service['multipath'],
+  }
+
+  if $multipath::configfile_source != undef and $multipath::configfile_source != '' {
+    # Use the source or the content as the reference for the /etc/multipath.conf
+    concat::fragment { "${multipath::configfile}_full":
+      target => $multipath::configfile,
+      order  => '01',
+      source => $multipath::configfile_source,
+      notify => Service['multipath'],
+    }
+  }
+  else
+  {
+    # Here, build the /etc/multipath.conf by fragments, starting from the
+    # defaults settings (precised with the classe instanciation), the rest
+    # beeing set by the following definitions:
+    #    - multipath::device    (to define a device)
+    #    - multipath::blacklist (to blacklist some device from multipathing)
+    #    - multipath::path      (to define a path to a device)
+    concat::fragment { "${multipath::configfile}_header":
+      target  => $multipath::configfile,
+      content => template('multipath/01-multipath.conf_header.erb'),
+      order   => '01',
     }
 
-    if $multipath::manage_service {
-        if $multipath::ensure == 'present' {
-            $multipath_service_ensure = $multipath::service_ensure
-            $multipath_service_enable = $multipath::service_enable
-        } else {
-            $multipath_service_ensure = 'stopped'
-            $multipath_service_enable = false
-        }
-
-        service { 'multipath':
-          ensure  => $multipath_service_ensure,
-          enable  => $multipath_service_enable,
-          name    => $multipath::service_name,
-          require => Package['multipath'],
-        }
-
-        include ::rclocal
-        rclocal::update { 'Increase timeout for FC':
-          ensure  => $multipath::ensure,
-          content => template('multipath/rc.local.access_timeout.erb'),
-          order   => 20,
-        }
+    # 'devices' section
+    concat::fragment { "${multipath::configfile}_devices_header":
+      target => $multipath::configfile,
+      source => 'puppet:///modules/multipath/10-multipath-devices_header',
+      order  => '10',
+    }
+    concat::fragment { "${multipath::configfile}_devices_footer":
+      target => $multipath::configfile,
+      source => 'puppet:///modules/multipath/30-multipath-devices_footer',
+      order  => '30',
     }
 
-    # TODO: deal with ensure != 'present'
-    concat { $multipath::configfile:
-        warn    => false,
-        owner   => $multipath::params::configfile_owner,
-        group   => $multipath::params::configfile_group,
-        mode    => $multipath::params::configfile_mode,
-        require => Package['multipath'],
-        notify  => Service['multipath'],
+    # 'blacklist' section
+    concat::fragment { "${multipath::configfile}_blacklist_header":
+      target => $multipath::configfile,
+      source => 'puppet:///modules/multipath/35-multipath-blacklist_header',
+      order  => '35',
     }
 
-    if $multipath::configfile_source != undef and $multipath::configfile_source != '' {
-        # Use the source or the content as the reference for the /etc/multipath.conf
-        concat::fragment { "${multipath::configfile}_full":
-            target => $multipath::configfile,
-            order  => '01',
-            source => $multipath::configfile_source,
-            notify => Service['multipath'],
-        }
+    # 'blacklist_exceptions' section
+    concat::fragment { "${multipath::configfile}_blacklist_exceptions_header":
+      target => $multipath::configfile,
+      source => 'puppet:///modules/multipath/45-multipath-blacklist_exceptions_header',
+      order  => '45',
     }
-    else
-    {
-        # Here, build the /etc/multipath.conf by fragments, starting from the
-        # defaults settings (precised with the classe instanciation), the rest
-        # beeing set by the following definitions:
-        #    - multipath::device    (to define a device)
-        #    - multipath::blacklist (to blacklist some device from multipathing)
-        #    - multipath::path      (to define a path to a device)
-        concat::fragment { "${multipath::configfile}_header":
-            target  => $multipath::configfile,
-            content => template('multipath/01-multipath.conf_header.erb'),
-            order   => '01',
-        }
 
-        # 'devices' section
-        concat::fragment { "${multipath::configfile}_devices_header":
-            target => $multipath::configfile,
-            source => 'puppet:///modules/multipath/10-multipath-devices_header',
-            order  => '10',
-        }
-        concat::fragment { "${multipath::configfile}_devices_footer":
-            target => $multipath::configfile,
-            source => 'puppet:///modules/multipath/30-multipath-devices_footer',
-            order  => '30',
-        }
-
-        # 'blacklist' section
-        concat::fragment { "${multipath::configfile}_blacklist_header":
-            target => $multipath::configfile,
-            source => 'puppet:///modules/multipath/35-multipath-blacklist_header',
-            order  => '35',
-        }
-
-        # 'blacklist_exceptions' section
-        concat::fragment { "${multipath::configfile}_blacklist_exceptions_header":
-            target => $multipath::configfile,
-            source => 'puppet:///modules/multipath/45-multipath-blacklist_exceptions_header',
-            order  => '45',
-        }
-
-        # 'multipaths' section
-        concat::fragment { "${multipath::configfile}_multipaths_header":
-            target => $multipath::configfile,
-            source => 'puppet:///modules/multipath/55-multipath-multipaths_header',
-            order  => '55',
-        }
-        concat::fragment { "${multipath::configfile}_multipaths_footer":
-            target => $multipath::configfile,
-            source => 'puppet:///modules/multipath/99-multipath-multipaths_footer',
-            order  => '99',
-        }
-
+    # 'multipaths' section
+    concat::fragment { "${multipath::configfile}_multipaths_header":
+      target => $multipath::configfile,
+      source => 'puppet:///modules/multipath/55-multipath-multipaths_header',
+      order  => '55',
     }
+    concat::fragment { "${multipath::configfile}_multipaths_footer":
+      target => $multipath::configfile,
+      source => 'puppet:///modules/multipath/99-multipath-multipaths_footer',
+      order  => '99',
+    }
+
+  }
 
 }
 
